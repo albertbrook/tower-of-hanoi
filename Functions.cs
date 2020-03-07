@@ -17,7 +17,6 @@ namespace TowerOfHanoi
         private Point origin;
         private Point gap;
 
-
         private Functions()
         {
             picture = Picture.GetPicture();
@@ -94,7 +93,12 @@ namespace TowerOfHanoi
         private void Picture_MouseMove(object sender, MouseEventArgs e)
         {
             if (move)
+            {
                 blocks[moveIndex].Location = new Point(e.X + gap.X, e.Y + gap.Y);
+                int pillarIndex = GetPillarIndex();
+                if (pillarIndex != indexs[moveIndex] && IsFristBlock() && IsCanMove(pillarIndex))
+                    picture.SetGrayIndex(pillarIndex);
+            }
         }
     }
 }
