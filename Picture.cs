@@ -10,6 +10,7 @@ namespace TowerOfHanoi
         private readonly Rectangle[] pillars = new Rectangle[3];
         private readonly Rectangle[] blocks = new Rectangle[Settings.BlockCount];
         private readonly int[] indexs = new int[Settings.BlockCount];
+        private int grayIndex;
 
         private Picture()
         {
@@ -31,14 +32,22 @@ namespace TowerOfHanoi
 
         internal int[] GetIndexs() { return indexs; }
 
+        internal void SetGrayIndex(int index) { grayIndex = index; }
+
         private void Picture_Paint(object sender, PaintEventArgs e)
         {
             Bitmap bitmap = new Bitmap(Settings.ScreenSize.Width, Settings.ScreenSize.Height);
             Graphics g = Graphics.FromImage(bitmap);
 
             SolidBrush b = new SolidBrush(Settings.PillarColor);
-            foreach (Rectangle pillar in pillars)
-                g.FillRectangle(b, pillar);
+            for (int i = 0; i < pillars.Length; i++)
+            {
+                if (i == grayIndex)
+                    b.Color = Color.Gray;
+                else
+                    b.Color = Settings.PillarColor;
+                g.FillRectangle(b, pillars[i]);
+            }
 
             b.Color = Settings.BlockColor;
             foreach (Rectangle block in blocks)
@@ -72,6 +81,7 @@ namespace TowerOfHanoi
                 blocks[i].X = pillars[indexs[i]].X + ((pillars[indexs[i]].Width - Settings.BlockWidths[i]) >> 1);
                 blocks[i].Y = Settings.ScreenSize.Height - Settings.BlockHeight * sinkCount[indexs[i]]--;
             }
+            grayIndex = -1;
         }
     }
 }
